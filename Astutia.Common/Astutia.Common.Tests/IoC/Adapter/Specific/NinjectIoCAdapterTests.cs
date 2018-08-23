@@ -54,6 +54,18 @@ namespace Astutia.Common.Tests.IoC.Adapter.Specific
             base.WhenRegisterFactory_ShouldGetLevel3Properly();
         }
 
+        [TestMethod]
+        public override void WhenRegisterAsSingleton_ShouldCreateOnce()
+        {
+            base.WhenRegisterAsSingleton_ShouldCreateOnce();
+        }
+
+        [TestMethod]
+        public override void WhenRegisterAsSingleton_ShouldCreateOnce2()
+        {
+            base.WhenRegisterAsSingleton_ShouldCreateOnce2();
+        }
+
         protected override IIoCContainer CreateTarget()
         {
             IKernel kernel = new StandardKernel();

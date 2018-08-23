@@ -33,7 +33,13 @@ namespace Astutia.Common.IoC.Adapter.Specific
             object[] bindArguments = new object[] { new Type[] { typeof(TDependency) } };
             object bindResult = this.GetMethod(this.container, "Bind", bindArguments.Length).Invoke(this.container, bindArguments);
             object[] toArguments = new object[] { typeof(TImplementation) };
-            this.GetMethod(bindResult, "To", toArguments.Length).Invoke(bindResult, toArguments);
+            object toResult = this.GetMethod(bindResult, "To", toArguments.Length).Invoke(bindResult, toArguments);
+
+            if (settings == IocRegisterSettings.Singleton)
+            {
+                this.GetMethod(toResult, "InSingletonScope", 0).Invoke(toResult, new object[0]);
+            }
+
             return this;
         }
 
@@ -50,7 +56,13 @@ namespace Astutia.Common.IoC.Adapter.Specific
             object[] bindArguments = new object[] { new Type[] { typeof(TObject) } };
             object bindResult = this.GetMethod(this.container, "Bind", bindArguments.Length).Invoke(this.container, bindArguments);
             object[] toMethodArguments = new object[] { new Func<object, TObject>((object a) => creationAction(this)) };
-            this.GetMethod(bindResult, "ToMethod", toMethodArguments.Length).Invoke(bindResult, toMethodArguments);
+            object toMethodResult = this.GetMethod(bindResult, "ToMethod", toMethodArguments.Length).Invoke(bindResult, toMethodArguments);
+
+            if (settings == IocRegisterSettings.Singleton)
+            {
+                this.GetMethod(toMethodResult, "InSingletonScope", 0).Invoke(toMethodResult, new object[0]);
+            }
+
             return this;
         }
 
