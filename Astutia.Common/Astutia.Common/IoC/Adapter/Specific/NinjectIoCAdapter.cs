@@ -29,7 +29,11 @@ namespace Astutia.Common.IoC.Adapter.Specific
         /// <returns>The registrar.</returns>
         public override IIoCRegistrar Register<TDependency, TImplementation>(IocRegisterSettings settings)
         {
-            this.InvokePublicMethod(this.InvokePublicMethod(this.container, "Bind", new object[] { new Type[] { typeof(TDependency) } }), "To", new object[] { typeof(TImplementation) });
+            // Invokation of kernel.Bind(typeof(TDependency)).To(typeof(TImplementation));
+            object[] bindArguments = new object[] { new Type[] { typeof(TDependency) } };
+            object bindResult = this.GetMethod(this.container, "Bind", bindArguments.Length).Invoke(this.container, bindArguments);
+            object[] toArguments = new object[] { typeof(TImplementation) };
+            this.GetMethod(bindResult, "To", toArguments.Length).Invoke(bindResult, toArguments);
             return this;
         }
 
@@ -42,7 +46,11 @@ namespace Astutia.Common.IoC.Adapter.Specific
         /// <returns>The registrar.</returns>
         public override IIoCRegistrar Register<TObject>(Func<IIoCResolver, TObject> creationAction, IocRegisterSettings settings)
         {
-            this.InvokePublicMethod(this.InvokePublicMethod(this.container, "Bind", new object[] { new Type[] { typeof(TObject) } }), "ToMethod", new object[] { new Func<object, TObject>((object a) => creationAction(this)) });
+            // Invokation of kernel.Bind(typeof(TDependency)).ToMethod(context => creationAction(this));
+            object[] bindArguments = new object[] { new Type[] { typeof(TObject) } };
+            object bindResult = this.GetMethod(this.container, "Bind", bindArguments.Length).Invoke(this.container, bindArguments);
+            object[] toMethodArguments = new object[] { new Func<object, TObject>((object a) => creationAction(this)) };
+            this.GetMethod(bindResult, "ToMethod", toMethodArguments.Length).Invoke(bindResult, toMethodArguments);
             return this;
         }
 
@@ -53,36 +61,10 @@ namespace Astutia.Common.IoC.Adapter.Specific
         /// <returns>The resolved object.</returns>
         public override TObject Resolve<TObject>()
         {
-            return (TObject)this.InvokePublicMethod(this.container, "System.IServiceProvider.GetService", new object[] { typeof(TObject) });
-        }
-
-        // TODO
-        protected object InvokePublicMethod(object item, string name, object[] parameters)
-        {
-            TypeInfo info = item.GetType().GetTypeInfo();
-            MethodInfo method = GetMethods(info).FirstOrDefault(x => x.Name == name
-                                                                     && x.GetParameters().Length == parameters.Length);
-            return method.Invoke(item, parameters);
-        }
-
-        public static IEnumerable<MethodInfo> GetMethods(TypeInfo type)
-        {
-            TypeInfo current = type;
-
-            while (true)
-            {
-                foreach (MethodInfo info in current.DeclaredMethods)
-                {
-                    yield return info;
-                }
-
-                if (current.BaseType == null)
-                {
-                    break;
-                }
-
-                current = current.BaseType.GetTypeInfo();
-            }
+            // Invokation of kernel.GetService(typeof(TObject));
+            object[] arguments = new object[] { typeof(TObject) };
+            return (TObject)this.GetMethod(this.container, "System.IServiceProvider.GetService", arguments.Length)
+                                .Invoke(this.container, arguments);
         }
     }
 }

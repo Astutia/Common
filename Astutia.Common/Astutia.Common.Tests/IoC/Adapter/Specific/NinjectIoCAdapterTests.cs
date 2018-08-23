@@ -12,6 +12,12 @@ namespace Astutia.Common.Tests.IoC.Adapter.Specific
     [TestClass]
     public class NinjectIoCAdapterTests : IoCAdapterTestsBase
     {
+        [TestInitialize]
+        public override void TestInitialize()
+        {
+            base.TestInitialize();
+        }
+
         [TestMethod]
         public override void WhenRegister_ShouldGetLevel1Properly()
         {
@@ -34,6 +40,18 @@ namespace Astutia.Common.Tests.IoC.Adapter.Specific
         public override void WhenRegisterFactory_ShouldGetLevel1Properly()
         {
             base.WhenRegisterFactory_ShouldGetLevel1Properly();
+        }
+
+        [TestMethod]
+        public override void WhenRegisterFactory_ShouldGetLevel2Properly()
+        {
+            base.WhenRegisterFactory_ShouldGetLevel2Properly();
+        }
+
+        [TestMethod]
+        public override void WhenRegisterFactory_ShouldGetLevel3Properly()
+        {
+            base.WhenRegisterFactory_ShouldGetLevel3Properly();
         }
 
         protected override IIoCContainer CreateTarget()

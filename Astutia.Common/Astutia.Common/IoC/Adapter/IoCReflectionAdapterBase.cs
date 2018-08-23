@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
+using System.Linq;
 
 namespace Astutia.Common.IoC.Adapter
 {
@@ -13,6 +15,16 @@ namespace Astutia.Common.IoC.Adapter
         /// The container.
         /// </summary>
         protected readonly object container;
+
+        /// <summary>
+        /// The synchronization object.
+        /// </summary>
+        private readonly object syncObject = new object();
+
+        /// <summary>
+        /// The cache for reflection methods.
+        /// </summary>
+        private readonly Dictionary<string, MethodInfo> methodsCache = new Dictionary<string, MethodInfo>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IoCReflectionAdapterBase"/> class.
@@ -47,5 +59,66 @@ namespace Astutia.Common.IoC.Adapter
         /// <typeparam name="TObject">The type of the object to resolve.</typeparam>
         /// <returns>The resolved object.</returns>
         public abstract TObject Resolve<TObject>();
+
+        /// <summary>
+        /// Gets a spoecific method.
+        /// </summary>
+        /// <param name="item">The object from which the method should be get.</param>
+        /// <param name="name">The name of the method.</param>
+        /// <param name="numberOfParameters">The number of parameters.</param>
+        /// <returns>The method.</returns>
+        protected MethodInfo GetMethod(object item, string name, int numberOfParameters)
+        {
+            lock (this.syncObject)
+            {
+                MethodInfo result;
+
+                if (this.methodsCache.TryGetValue(name, out result))
+                {
+                    return result;
+                }
+            }
+
+            TypeInfo info = item.GetType().GetTypeInfo();
+            MethodInfo method = GetMethods(info).FirstOrDefault(x => x.Name == name
+                                                                && x.GetParameters().Length == numberOfParameters);
+
+            if (method == null)
+            {
+                throw new InvalidOperationException(string.Format("No method '{0}'.", name));
+            }
+
+            lock (this.syncObject)
+            {
+                this.methodsCache[name] = method;
+            }
+
+            return method;
+        }
+
+        /// <summary>
+        /// Gets all public methods for the type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>All public methods for the type.</returns>
+        private static IEnumerable<MethodInfo> GetMethods(TypeInfo type)
+        {
+            TypeInfo current = type;
+
+            while (true)
+            {
+                foreach (MethodInfo info in current.DeclaredMethods)
+                {
+                    yield return info;
+                }
+
+                if (current.BaseType == null)
+                {
+                    break;
+                }
+
+                current = current.BaseType.GetTypeInfo();
+            }
+        }
     }
 }
