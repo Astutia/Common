@@ -12,6 +12,7 @@
     <PackageReference Include="MSTest.TestAdapter" Version="1.2.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.2.0" />
     <PackageReference Include="Ninject" Version="3.3.4" />
+    <PackageReference Include="Unity" Version="5.8.9" />
   </ItemGroup>
 
   <ItemGroup>

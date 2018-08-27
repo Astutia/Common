@@ -216,6 +216,81 @@ namespace Astutia.Common.Tests.IoC.Adapter.Specific
             actual1Level3.Should().NotBeSameAs(actual2Level3);
         }
 
+        public virtual void WhenRegisterFactorySingleton_ShouldGetLevel1Properly()
+        {
+            // Arrange
+            IIoCContainer target = this.CreateTarget();
+            RegisterTestObjectContext registration = new RegisterTestObjectContext()
+            {
+                Container = target,
+                Settings = new RegisterLevelContext[]
+                {
+                    new RegisterLevelContext() { UseFactory = true, Settings = IocRegisterSettings.Singleton },
+                    new RegisterLevelContext() { UseFactory = false, Settings = IocRegisterSettings.None },
+                    new RegisterLevelContext() { UseFactory = false, Settings = IocRegisterSettings.None }
+                }
+            };
+            this.Register(registration);
+
+            // Act
+            ILevel1 actual1 = target.Resolve<ILevel1>();
+            ILevel1 actual2 = target.Resolve<ILevel1>();
+
+            // Assert
+            actual1.Should().BeSameAs(actual2);
+            this.AssertProperObjectTree(actual1, registration);
+        }
+
+        public virtual void WhenRegisterFactorySingleton_ShouldGetLevel2Properly()
+        {
+            // Arrange
+            IIoCContainer target = this.CreateTarget();
+            RegisterTestObjectContext registration = new RegisterTestObjectContext()
+            {
+                Container = target,
+                Settings = new RegisterLevelContext[]
+                {
+                    new RegisterLevelContext() { UseFactory = false, Settings = IocRegisterSettings.None },
+                    new RegisterLevelContext() { UseFactory = true, Settings = IocRegisterSettings.Singleton },
+                    new RegisterLevelContext() { UseFactory = false, Settings = IocRegisterSettings.None }
+                }
+            };
+            this.Register(registration);
+
+            // Act
+            ILevel2 actual1 = target.Resolve<ILevel2>();
+            ILevel2 actual2 = target.Resolve<ILevel2>();
+
+            // Assert
+            actual1.Should().BeSameAs(actual2);
+            this.AssertProperObjectTree(actual1, registration);
+        }
+
+        public virtual void WhenRegisterFactorySingleton_ShouldGetLevel3Properly()
+        {
+            // Arrange
+            IIoCContainer target = this.CreateTarget();
+            RegisterTestObjectContext registration = new RegisterTestObjectContext()
+            {
+                Container = target,
+                Settings = new RegisterLevelContext[]
+                {
+                    new RegisterLevelContext() { UseFactory = false, Settings = IocRegisterSettings.None },
+                    new RegisterLevelContext() { UseFactory = false, Settings = IocRegisterSettings.None },
+                    new RegisterLevelContext() { UseFactory = true, Settings = IocRegisterSettings.Singleton }
+                }
+            };
+            this.Register(registration);
+
+            // Act
+            ILevel3 actual1 = target.Resolve<ILevel3>();
+            ILevel3 actual2 = target.Resolve<ILevel3>();
+
+            // Assert
+            actual1.Should().BeSameAs(actual2);
+            this.AssertProperObjectTree(actual1, registration);
+        }
+
         protected abstract IIoCContainer CreateTarget();
 
         private void Register(RegisterTestObjectContext context)

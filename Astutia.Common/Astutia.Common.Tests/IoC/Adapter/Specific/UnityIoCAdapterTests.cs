@@ -1,16 +1,15 @@
-﻿using System;
+﻿using Astutia.Common.IoC;
+using Astutia.Common.IoC.Adapter.Specific;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using Astutia.Common.IoC;
-using Astutia.Common.IoC.Adapter.Specific;
-using Astutia.Common.Tests.IoC.Adapter.Specific.TestObjects;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Ninject;
+using Unity;
 
 namespace Astutia.Common.Tests.IoC.Adapter.Specific
 {
     [TestClass]
-    public class NinjectIoCAdapterTests : IoCAdapterTestsBase
+    public class UnityIoCAdapterTests : IoCAdapterTestsBase
     {
         [TestInitialize]
         public override void TestInitialize()
@@ -86,8 +85,8 @@ namespace Astutia.Common.Tests.IoC.Adapter.Specific
 
         protected override IIoCContainer CreateTarget()
         {
-            IKernel kernel = new StandardKernel();
-            return new NinjectIoCAdapter(kernel);
+            IUnityContainer container = new UnityContainer();container.RegisterSingleton()
+            return new UnityIoCAdapter(container);
         }
     }
 }

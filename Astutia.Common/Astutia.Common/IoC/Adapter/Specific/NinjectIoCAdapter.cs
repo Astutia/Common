@@ -29,7 +29,7 @@ namespace Astutia.Common.IoC.Adapter.Specific
         /// <returns>The registrar.</returns>
         public override IIoCRegistrar Register<TDependency, TImplementation>(IocRegisterSettings settings)
         {
-            // Invokation of kernel.Bind(typeof(TDependency)).To(typeof(TImplementation));
+            // Invocation of kernel.Bind(typeof(TDependency)).To(typeof(TImplementation));
             object[] bindArguments = new object[] { new Type[] { typeof(TDependency) } };
             object bindResult = this.GetMethod(this.container, "Bind", bindArguments.Length).Invoke(this.container, bindArguments);
             object[] toArguments = new object[] { typeof(TImplementation) };
@@ -52,10 +52,10 @@ namespace Astutia.Common.IoC.Adapter.Specific
         /// <returns>The registrar.</returns>
         public override IIoCRegistrar Register<TObject>(Func<IIoCResolver, TObject> creationAction, IocRegisterSettings settings)
         {
-            // Invokation of kernel.Bind(typeof(TDependency)).ToMethod(context => creationAction(this));
+            // Invocation of kernel.Bind(typeof(TDependency)).ToMethod(context => creationAction(this));
             object[] bindArguments = new object[] { new Type[] { typeof(TObject) } };
             object bindResult = this.GetMethod(this.container, "Bind", bindArguments.Length).Invoke(this.container, bindArguments);
-            object[] toMethodArguments = new object[] { new Func<object, TObject>((object a) => creationAction(this)) };
+            object[] toMethodArguments = new object[] { new Func<object, TObject>((object originalContainer) => creationAction(this)) };
             object toMethodResult = this.GetMethod(bindResult, "ToMethod", toMethodArguments.Length).Invoke(bindResult, toMethodArguments);
 
             if (settings == IocRegisterSettings.Singleton)
@@ -73,7 +73,7 @@ namespace Astutia.Common.IoC.Adapter.Specific
         /// <returns>The resolved object.</returns>
         public override TObject Resolve<TObject>()
         {
-            // Invokation of kernel.GetService(typeof(TObject));
+            // Invocation of kernel.GetService(typeof(TObject));
             object[] arguments = new object[] { typeof(TObject) };
             return (TObject)this.GetMethod(this.container, "System.IServiceProvider.GetService", arguments.Length)
                                 .Invoke(this.container, arguments);

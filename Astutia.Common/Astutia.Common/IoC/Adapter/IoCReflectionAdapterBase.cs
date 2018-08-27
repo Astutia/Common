@@ -69,17 +69,29 @@ namespace Astutia.Common.IoC.Adapter
         /// <returns>The method.</returns>
         protected MethodInfo GetMethod(object item, string name, int numberOfParameters)
         {
+            return this.GetMethod(item.GetType().GetTypeInfo(), name, numberOfParameters);
+        }
+
+        /// <summary>
+        /// Gets a spoecific method.
+        /// </summary>
+        /// <param name="info">The type info.</param>
+        /// <param name="name">The name of the method.</param>
+        /// <param name="numberOfParameters">The number of parameters.</param>
+        /// <param name="cacheName">The cache name.</param>
+        /// <returns>The method.</returns>
+        protected MethodInfo GetMethod(TypeInfo info, string name, int numberOfParameters, string cacheName = null)
+        {
             lock (this.syncObject)
             {
                 MethodInfo result;
 
-                if (this.methodsCache.TryGetValue(name, out result))
+                if (this.methodsCache.TryGetValue(string.IsNullOrEmpty(cacheName) ? name : cacheName, out result))
                 {
                     return result;
                 }
             }
 
-            TypeInfo info = item.GetType().GetTypeInfo();
             MethodInfo method = GetMethods(info).FirstOrDefault(x => x.Name == name
                                                                 && x.GetParameters().Length == numberOfParameters);
 
@@ -90,7 +102,43 @@ namespace Astutia.Common.IoC.Adapter
 
             lock (this.syncObject)
             {
-                this.methodsCache[name] = method;
+                this.methodsCache[string.IsNullOrEmpty(cacheName) ? name : cacheName] = method;
+            }
+
+            return method;
+        }
+
+        /// <summary>
+        /// Gets a spoecific method.
+        /// </summary>
+        /// <param name="info">The type info.</param>
+        /// <param name="name">The name of the method.</param>
+        /// <param name="parameters">The colleciton of parameters.</param>
+        /// <param name="cacheName">The cache name.</param>
+        /// <returns>The method.</returns>
+        protected MethodInfo GetMethod(TypeInfo info, string name, Type[] parameters, string cacheName = null)
+        {
+            lock (this.syncObject)
+            {
+                MethodInfo result;
+
+                if (this.methodsCache.TryGetValue(string.IsNullOrEmpty(cacheName) ? name : cacheName, out result))
+                {
+                    return result;
+                }
+            }
+
+            MethodInfo method = GetMethods(info).FirstOrDefault(x => x.Name == name
+                                                                && x.GetParameters().Select(parameter => parameter.ParameterType).SequenceEqual(parameters));
+
+            if (method == null)
+            {
+                throw new InvalidOperationException(string.Format("No method '{0}'.", name));
+            }
+
+            lock (this.syncObject)
+            {
+                this.methodsCache[string.IsNullOrEmpty(cacheName) ? name : cacheName] = method;
             }
 
             return method;
