@@ -76,7 +76,7 @@ namespace Astutia.Common.IoC.Adapter.Specific
                                    : this.GetMethod(this.unityContainerExtensionsTypeInfo, "RegisterType", this.registerParameters, "RegisterTypeForSimpleRegistration");
             method.Invoke(null, new object[]
                    {
-                       this.container,
+                       this.registrar,
                        typeof(TDependency),
                        typeof(TImplementation),
                        null
@@ -102,7 +102,7 @@ namespace Astutia.Common.IoC.Adapter.Specific
             array.SetValue(Activator.CreateInstance(this.injectionFactoryType, new object[] { new Func<object, object>(originalContainer => creationAction(this)) }), 0);
             method.Invoke(null, new object[]
                    {
-                       this.container,
+                       this.registrar,
                        typeof(TObject),
                        null,
                        array
@@ -119,8 +119,8 @@ namespace Astutia.Common.IoC.Adapter.Specific
         {
             // Invocation of container.Resolve(typeof(TObject), null);
             object[] arguments = new object[] { typeof(TObject), null, null };
-            return (TObject)GetMethod(this.container, "Resolve", arguments.Length)
-                            .Invoke(this.container, arguments); 
+            return (TObject)GetMethod(this.Resolver, "Resolve", arguments.Length)
+                            .Invoke(this.Resolver, arguments); 
         }
     }
 }

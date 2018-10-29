@@ -16,7 +16,8 @@ namespace Astutia.Common.IoC.Adapter
         private readonly Dictionary<string, Func<object, IIoCContainer>> adapters = new Dictionary<string, Func<object, IIoCContainer>>()
         {
             { "Ninject", container => new NinjectIoCAdapter(container) },
-            { "Unity", container => new UnityIoCAdapter(container) }
+            { "Unity", container => new UnityIoCAdapter(container) },
+            { "Autofac", container => new AutofacIoCAdapter(container) }
         };
 
         /// <summary>

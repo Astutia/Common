@@ -12,9 +12,9 @@ namespace Astutia.Common.IoC.Adapter
     internal abstract class IoCReflectionAdapterBase : IIoCContainer
     {
         /// <summary>
-        /// The container.
+        /// The registrar.
         /// </summary>
-        protected readonly object container;
+        protected readonly object registrar;
 
         /// <summary>
         /// The synchronization object.
@@ -29,10 +29,20 @@ namespace Astutia.Common.IoC.Adapter
         /// <summary>
         /// Initializes a new instance of the <see cref="IoCReflectionAdapterBase"/> class.
         /// </summary>
-        /// <param name="container">The container.</param>
-        public IoCReflectionAdapterBase(object container)
+        /// <param name="registrar">The registrar.</param>
+        public IoCReflectionAdapterBase(object registrar)
         {
-            this.container = container ?? throw new ArgumentNullException(nameof(container));
+            this.registrar = registrar ?? throw new ArgumentNullException(nameof(registrar));
+            this.Resolver = this.registrar;
+        }
+
+        /// <summary>
+        /// Gets or sets the resolver.
+        /// </summary>
+        public object Resolver
+        {
+            get;
+            set;
         }
 
         /// <summary>
@@ -115,16 +125,20 @@ namespace Astutia.Common.IoC.Adapter
         /// <param name="name">The name of the method.</param>
         /// <param name="parameters">The colleciton of parameters.</param>
         /// <param name="cacheName">The cache name.</param>
+        /// <param name="cached">A value indicating whether the method is cached.</param>
         /// <returns>The method.</returns>
-        protected MethodInfo GetMethod(TypeInfo info, string name, Type[] parameters, string cacheName = null)
+        protected MethodInfo GetMethod(TypeInfo info, string name, Type[] parameters, string cacheName = null, bool cached = true)
         {
-            lock (this.syncObject)
+            if (cached)
             {
-                MethodInfo result;
-
-                if (this.methodsCache.TryGetValue(string.IsNullOrEmpty(cacheName) ? name : cacheName, out result))
+                lock (this.syncObject)
                 {
-                    return result;
+                    MethodInfo result;
+
+                    if (this.methodsCache.TryGetValue(string.IsNullOrEmpty(cacheName) ? name : cacheName, out result))
+                    {
+                        return result;
+                    }
                 }
             }
 
@@ -136,9 +150,12 @@ namespace Astutia.Common.IoC.Adapter
                 throw new InvalidOperationException(string.Format("No method '{0}'.", name));
             }
 
-            lock (this.syncObject)
+            if (cached)
             {
-                this.methodsCache[string.IsNullOrEmpty(cacheName) ? name : cacheName] = method;
+                lock (this.syncObject)
+                {
+                    this.methodsCache[string.IsNullOrEmpty(cacheName) ? name : cacheName] = method;
+                }
             }
 
             return method;

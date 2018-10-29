@@ -31,7 +31,7 @@ namespace Astutia.Common.IoC.Adapter.Specific
         {
             // Invocation of kernel.Bind(typeof(TDependency)).To(typeof(TImplementation));
             object[] bindArguments = new object[] { new Type[] { typeof(TDependency) } };
-            object bindResult = this.GetMethod(this.container, "Bind", bindArguments.Length).Invoke(this.container, bindArguments);
+            object bindResult = this.GetMethod(this.registrar, "Bind", bindArguments.Length).Invoke(this.registrar, bindArguments);
             object[] toArguments = new object[] { typeof(TImplementation) };
             object toResult = this.GetMethod(bindResult, "To", toArguments.Length).Invoke(bindResult, toArguments);
 
@@ -54,7 +54,7 @@ namespace Astutia.Common.IoC.Adapter.Specific
         {
             // Invocation of kernel.Bind(typeof(TDependency)).ToMethod(context => creationAction(this));
             object[] bindArguments = new object[] { new Type[] { typeof(TObject) } };
-            object bindResult = this.GetMethod(this.container, "Bind", bindArguments.Length).Invoke(this.container, bindArguments);
+            object bindResult = this.GetMethod(this.registrar, "Bind", bindArguments.Length).Invoke(this.registrar, bindArguments);
             object[] toMethodArguments = new object[] { new Func<object, TObject>((object originalContainer) => creationAction(this)) };
             object toMethodResult = this.GetMethod(bindResult, "ToMethod", toMethodArguments.Length).Invoke(bindResult, toMethodArguments);
 
@@ -75,8 +75,8 @@ namespace Astutia.Common.IoC.Adapter.Specific
         {
             // Invocation of kernel.GetService(typeof(TObject));
             object[] arguments = new object[] { typeof(TObject) };
-            return (TObject)this.GetMethod(this.container, "System.IServiceProvider.GetService", arguments.Length)
-                                .Invoke(this.container, arguments);
+            return (TObject)this.GetMethod(this.Resolver, "System.IServiceProvider.GetService", arguments.Length)
+                                .Invoke(this.Resolver, arguments);
         }
     }
 }

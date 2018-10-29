@@ -1,20 +1,68 @@
 ﻿using Astutia.Common.IoC;
 using Astutia.Common.IoC.Adapter.Specific;
+using Astutia.Common.Tests.IoC.Adapter.Specific.TestObjects;
+using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Unity;
 
 namespace Astutia.Common.Tests.IoC.Adapter.Specific
 {
     [TestClass]
-    public class UnityIoCAdapterTests : IoCAdapterTestsBase
+    public class AutofacIoCAdapterTests : IoCAdapterTestsBase
     {
+        private ContainerBuilder container;
+
         [TestInitialize]
         public override void TestInitialize()
         {
             base.TestInitialize();
+            this.container = new ContainerBuilder();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void WhenResolveWithouInvokingSetResolveContainer_ShouldThrowException()
+        {
+            // Arrange
+            IIoCContainer target = this.CreateTarget();
+
+            // Act
+            target.Resolve<ILevel1>();
+
+            // Assert
+            Assert.Fail("An exception is expected.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void WhenRegisterAfterInvokingSetResolveContainer_ShouldThrowException()
+        {
+            // Arrange
+            IIoCContainer target = this.CreateTarget();
+            target.SetResolveContainer(this.container.Build());
+
+            // Act
+            target.Register<ILevel1, Level1Object>(IocRegisterSettings.None);
+
+            // Assert
+            Assert.Fail("An exception is expected.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void WhenRegisterFactoryAfterInvokingSetResolveContainer_ShouldThrowException()
+        {
+            // Arrange
+            IIoCContainer target = this.CreateTarget();
+            target.SetResolveContainer(this.container.Build());
+
+            // Act
+            target.Register<ILevel1>(container => null, IocRegisterSettings.None);
+
+            // Assert
+            Assert.Fail("An exception is expected.");
         }
 
         [TestMethod]
@@ -85,8 +133,12 @@ namespace Astutia.Common.Tests.IoC.Adapter.Specific
 
         protected override IIoCContainer CreateTarget()
         {
-            IUnityContainer container = new UnityContainer();
-            return new UnityIoCAdapter(container);
+            return new AutofacIoCAdapter(this.container);
+        }
+
+        protected override void NotifyRegistrationFinished(IIoCContainer target)
+        {
+            target.SetResolveContainer(this.container.Build());
         }
     }
 }

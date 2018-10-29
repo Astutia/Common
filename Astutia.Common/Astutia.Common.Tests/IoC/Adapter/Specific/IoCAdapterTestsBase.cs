@@ -293,6 +293,10 @@ namespace Astutia.Common.Tests.IoC.Adapter.Specific
 
         protected abstract IIoCContainer CreateTarget();
 
+        protected virtual void NotifyRegistrationFinished(IIoCContainer target)
+        {
+        }
+
         private void Register(RegisterTestObjectContext context)
         {
             if (context.Settings[0].UseFactory)
@@ -336,6 +340,8 @@ namespace Astutia.Common.Tests.IoC.Adapter.Specific
             {
                 context.Container.Register<ILevel3, Level3Object>(context.Settings[2].Settings);
             }
+
+            this.NotifyRegistrationFinished(context.Container);
         }
 
         private void AssertProperObjectTree(ILevel root, RegisterTestObjectContext registration)
