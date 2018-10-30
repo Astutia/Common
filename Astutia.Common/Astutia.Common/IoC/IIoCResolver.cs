@@ -12,8 +12,8 @@ namespace Astutia.Common.IoC
         /// <summary>
         /// Resolves an objects.
         /// </summary>
-        /// <typeparam name="TObject">The type of the object to resolve.</typeparam>
+        /// <param name="type">The type of the object to resolve.</param>
         /// <returns>The resolved object.</returns>
-        TObject Resolve<TObject>();
+        object Resolve(Type type);
     }
 }

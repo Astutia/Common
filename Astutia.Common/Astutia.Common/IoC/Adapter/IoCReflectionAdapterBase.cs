@@ -66,9 +66,9 @@ namespace Astutia.Common.IoC.Adapter
         /// <summary>
         /// Resolves an objects.
         /// </summary>
-        /// <typeparam name="TObject">The type of the object to resolve.</typeparam>
+        /// <param name="type">The type of the object to resolve.</param>
         /// <returns>The resolved object.</returns>
-        public abstract TObject Resolve<TObject>();
+        public abstract object Resolve(Type type);
 
         /// <summary>
         /// Gets a spoecific method.

@@ -1,6 +1,6 @@
 ﻿using Astutia.Common.IoC;
 using Astutia.Common.IoC.Adapter.Specific;
-using Astutia.Common.Tests.IoC.Adapter.Specific.TestObjects;
+using Astutia.Common.Tests.IoC.TestObjects;
 using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -10,7 +10,7 @@ using System.Text;
 namespace Astutia.Common.Tests.IoC.Adapter.Specific
 {
     [TestClass]
-    public class AutofacIoCAdapterTests : IoCAdapterTestsBase
+    public class AutofacIoCAdapterTests : IoCContainerTestsBase
     {
         private ContainerBuilder container;
 

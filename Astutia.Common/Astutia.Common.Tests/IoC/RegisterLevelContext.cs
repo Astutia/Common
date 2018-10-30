@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Astutia.Common.Tests.IoC.Adapter.Specific
+namespace Astutia.Common.Tests.IoC
 {
     public class RegisterLevelContext
     {

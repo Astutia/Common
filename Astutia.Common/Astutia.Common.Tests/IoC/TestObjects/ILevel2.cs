@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Astutia.Common.Tests.IoC.Adapter.Specific.TestObjects
+namespace Astutia.Common.Tests.IoC.TestObjects
 {
     public interface ILevel2 : ILevel
     {

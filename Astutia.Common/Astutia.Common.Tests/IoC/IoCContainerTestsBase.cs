@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using Astutia.Common.IoC;
-using Astutia.Common.Tests.IoC.Adapter.Specific.TestObjects;
+using Astutia.Common.Tests.IoC.TestObjects;
 using FluentAssertions;
 using System.Linq;
 
-namespace Astutia.Common.Tests.IoC.Adapter.Specific
+namespace Astutia.Common.Tests.IoC
 {
-    public abstract class IoCAdapterTestsBase
+    public abstract class IoCContainerTestsBase
     {
         private readonly List<int> factoryLevelInvoked = new List<int>();
 

@@ -34,7 +34,7 @@ namespace Astutia.Common.IoC.Module
                     {
                         if (this.container == null)
                         {
-                            this.container = new SimpleIoCContainer();
+                            this.container = new LightIoCContainer();
                             this.Register(this.container);
                         }
                     }
@@ -59,7 +59,7 @@ namespace Astutia.Common.IoC.Module
             {
                 if (this.container != null)
                 {
-                    if (this.container is SimpleIoCContainer)
+                    if (this.container is LightIoCContainer)
                     {
                         throw new InvalidOperationException("The mechanism was used before calling the Attach method. Make sure the Attach method is called before any mechanism usings.");
                     }

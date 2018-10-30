@@ -1,15 +1,14 @@
 ﻿using Astutia.Common.IoC;
-using Astutia.Common.IoC.Adapter.Specific;
+using Astutia.Common.IoC.Container;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Unity;
 
-namespace Astutia.Common.Tests.IoC.Adapter.Specific
+namespace Astutia.Common.Tests.IoC.Container
 {
     [TestClass]
-    public class UnityIoCAdapterTests : IoCContainerTestsBase
+    public class LightIoCContainerTests : IoCContainerTestsBase
     {
         [TestInitialize]
         public override void TestInitialize()
@@ -85,8 +84,7 @@ namespace Astutia.Common.Tests.IoC.Adapter.Specific
 
         protected override IIoCContainer CreateTarget()
         {
-            IUnityContainer container = new UnityContainer();
-            return new UnityIoCAdapter(container);
+            return new LightIoCContainer();
         }
     }
 }

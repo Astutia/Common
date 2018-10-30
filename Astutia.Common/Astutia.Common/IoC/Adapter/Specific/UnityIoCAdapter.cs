@@ -113,14 +113,14 @@ namespace Astutia.Common.IoC.Adapter.Specific
         /// <summary>
         /// Resolves an objects.
         /// </summary>
-        /// <typeparam name="TObject">The type of the object to resolve.</typeparam>
+        /// <param name="type">The type of the object to resolve.</param>
         /// <returns>The resolved object.</returns>
-        public override TObject Resolve<TObject>()
+        public override object Resolve(Type type)
         {
             // Invocation of container.Resolve(typeof(TObject), null);
-            object[] arguments = new object[] { typeof(TObject), null, null };
-            return (TObject)GetMethod(this.Resolver, "Resolve", arguments.Length)
-                            .Invoke(this.Resolver, arguments); 
+            object[] arguments = new object[] { type, null, null };
+            return GetMethod(this.Resolver, "Resolve", arguments.Length)
+                   .Invoke(this.Resolver, arguments); 
         }
     }
 }
