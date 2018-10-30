@@ -5,6 +5,7 @@ using Autofac;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace Astutia.Common.Tests.IoC.Adapter.Specific
@@ -19,6 +20,13 @@ namespace Astutia.Common.Tests.IoC.Adapter.Specific
         {
             base.TestInitialize();
             this.container = new ContainerBuilder();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(TargetInvocationException))]
+        public override void WhenNoRegistrationAndResolve_ShouldThrowException()
+        {
+            base.WhenNoRegistrationAndResolve_ShouldThrowException();
         }
 
         [TestMethod]

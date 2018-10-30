@@ -71,7 +71,7 @@ namespace Astutia.Common.IoC.Adapter.Specific
         {
             // Invocation of IUnityContainer RegisterSingleton(this IUnityContainer container, Type from, Type to, params InjectionMember[] injectionMembers);
             // and IUnityContainer RegisterType(this IUnityContainer container, Type from, Type to, params InjectionMember[] injectionMembers);
-            MethodInfo method = settings == IocRegisterSettings.Singleton
+            MethodInfo method = settings.IsSingleton()
                                    ? this.GetMethod(this.unityContainerExtensionsTypeInfo, "RegisterSingleton", this.registerParameters, "RegisterSingletonForSimpleRegistration")
                                    : this.GetMethod(this.unityContainerExtensionsTypeInfo, "RegisterType", this.registerParameters, "RegisterTypeForSimpleRegistration");
             method.Invoke(null, new object[]
@@ -85,7 +85,7 @@ namespace Astutia.Common.IoC.Adapter.Specific
         }
 
         /// <summary>
-        /// Registers a factoryu for an object.
+        /// Registers a factory for an object.
         /// </summary>
         /// <typeparam name="TObject">The type of the registration object in IoC.</typeparam>
         /// <param name="creationAction">The factory method.</param>
@@ -95,7 +95,7 @@ namespace Astutia.Common.IoC.Adapter.Specific
         {
             // Invocation of IUnityContainer RegisterSingleton(this IUnityContainer container, Type t, string name, params InjectionMember[] injectionMembers);
             // and IUnityContainer RegisterType(this IUnityContainer container, Type t, string name, params InjectionMember[] injectionMembers);
-            MethodInfo method = settings == IocRegisterSettings.Singleton
+            MethodInfo method = settings.IsSingleton()
                                    ? this.GetMethod(this.unityContainerExtensionsTypeInfo, "RegisterSingleton", this.registerFactoryParameters, "RegisterSingletonForFactoryRegistration")
                                    : this.GetMethod(this.unityContainerExtensionsTypeInfo, "RegisterType", this.registerFactoryParameters, "RegisterTypeForFactoryRegistration");
             Array array = Array.CreateInstance(this.injectionMemberType, 1);

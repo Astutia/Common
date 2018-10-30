@@ -19,7 +19,7 @@ namespace Astutia.Common.IoC
         IIoCRegistrar Register<TDependency, TImplementation>(IocRegisterSettings settings) where TImplementation : TDependency;
 
         /// <summary>
-        /// Registers a factoryu for an object.
+        /// Registers a factory for an object.
         /// </summary>
         /// <typeparam name="TObject">The type of the registration object in IoC.</typeparam>
         /// <param name="creationAction">The factory method.</param>

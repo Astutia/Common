@@ -3,6 +3,7 @@ using Astutia.Common.IoC.Adapter.Specific;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using Unity;
 
@@ -15,6 +16,13 @@ namespace Astutia.Common.Tests.IoC.Adapter.Specific
         public override void TestInitialize()
         {
             base.TestInitialize();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(TargetInvocationException))]
+        public override void WhenNoRegistrationAndResolve_ShouldThrowException()
+        {
+            base.WhenNoRegistrationAndResolve_ShouldThrowException();
         }
 
         [TestMethod]

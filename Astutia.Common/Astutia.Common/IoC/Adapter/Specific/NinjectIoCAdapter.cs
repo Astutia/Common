@@ -35,7 +35,7 @@ namespace Astutia.Common.IoC.Adapter.Specific
             object[] toArguments = new object[] { typeof(TImplementation) };
             object toResult = this.GetMethod(bindResult, "To", toArguments.Length).Invoke(bindResult, toArguments);
 
-            if (settings == IocRegisterSettings.Singleton)
+            if (settings.IsSingleton())
             {
                 this.GetMethod(toResult, "InSingletonScope", 0).Invoke(toResult, new object[0]);
             }
@@ -44,7 +44,7 @@ namespace Astutia.Common.IoC.Adapter.Specific
         }
 
         /// <summary>
-        /// Registers a factoryu for an object.
+        /// Registers a factory for an object.
         /// </summary>
         /// <typeparam name="TObject">The type of the registration object in IoC.</typeparam>
         /// <param name="creationAction">The factory method.</param>
@@ -58,7 +58,7 @@ namespace Astutia.Common.IoC.Adapter.Specific
             object[] toMethodArguments = new object[] { new Func<object, TObject>((object originalContainer) => creationAction(this)) };
             object toMethodResult = this.GetMethod(bindResult, "ToMethod", toMethodArguments.Length).Invoke(bindResult, toMethodArguments);
 
-            if (settings == IocRegisterSettings.Singleton)
+            if (settings.IsSingleton())
             {
                 this.GetMethod(toMethodResult, "InSingletonScope", 0).Invoke(toMethodResult, new object[0]);
             }

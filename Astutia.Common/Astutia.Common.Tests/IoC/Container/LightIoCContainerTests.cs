@@ -17,6 +17,12 @@ namespace Astutia.Common.Tests.IoC.Container
         }
 
         [TestMethod]
+        public override void WhenNoRegistrationAndResolve_ShouldThrowException()
+        {
+            base.WhenNoRegistrationAndResolve_ShouldThrowException();
+        }
+
+        [TestMethod]
         public override void WhenRegister_ShouldGetLevel1Properly()
         {
             base.WhenRegister_ShouldGetLevel1Properly();

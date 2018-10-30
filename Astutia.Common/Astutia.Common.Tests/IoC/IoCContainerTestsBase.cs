@@ -5,6 +5,7 @@ using Astutia.Common.IoC;
 using Astutia.Common.Tests.IoC.TestObjects;
 using FluentAssertions;
 using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Astutia.Common.Tests.IoC
 {
@@ -15,6 +16,20 @@ namespace Astutia.Common.Tests.IoC
         public virtual void TestInitialize()
         {
             this.factoryLevelInvoked.Clear();
+        }
+
+        [ExpectedException(typeof(InvalidOperationException))]
+        public virtual void WhenNoRegistrationAndResolve_ShouldThrowException()
+        {
+            // Arrange
+            IIoCContainer target = this.CreateTarget();
+            this.NotifyRegistrationFinished(target);
+
+            // Act
+            target.Resolve<ILevel1>();
+
+            // Assert
+            Assert.Fail("An exception expected.");
         }
 
         public virtual void WhenRegister_ShouldGetLevel1Properly()

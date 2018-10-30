@@ -72,7 +72,7 @@ namespace Astutia.Common.IoC.Adapter.Specific
         }
 
         /// <summary>
-        /// Registers a factoryu for an object.
+        /// Registers a factory for an object.
         /// </summary>
         /// <typeparam name="TObject">The type of the registration object in IoC.</typeparam>
         /// <param name="creationAction">The factory method.</param>
@@ -122,7 +122,7 @@ namespace Astutia.Common.IoC.Adapter.Specific
             MethodInfo asMethod = this.GetMethod(registrationResult.GetType().GetTypeInfo(), "As", new Type[] { typeof(Type[]) }, cached: false);
             object asResult = asMethod.Invoke(registrationResult, new object[] { new Type[] { typeof(TObject) } });
 
-            if (settings == IocRegisterSettings.Singleton)
+            if (settings.IsSingleton())
             {
                 MethodInfo singletonInstanceMethod = this.GetMethod(asResult.GetType().GetTypeInfo(), "SingleInstance", new Type[0]);
                 singletonInstanceMethod.Invoke(asResult, new object[0]);

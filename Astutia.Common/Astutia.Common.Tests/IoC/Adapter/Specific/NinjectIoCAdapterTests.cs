@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using Astutia.Common.IoC;
 using Astutia.Common.IoC.Adapter.Specific;
@@ -16,6 +17,13 @@ namespace Astutia.Common.Tests.IoC.Adapter.Specific
         public override void TestInitialize()
         {
             base.TestInitialize();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(TargetInvocationException))]
+        public override void WhenNoRegistrationAndResolve_ShouldThrowException()
+        {
+            base.WhenNoRegistrationAndResolve_ShouldThrowException();
         }
 
         [TestMethod]
