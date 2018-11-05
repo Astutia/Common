@@ -65,7 +65,7 @@ namespace Astutia.Common.IoC.Module
                     }
                     else
                     {
-                        throw new InvalidOperationException("The mechanism is already attached to an IoC container.");
+                        throw new InvalidOperationException($"The mechanism is already attached to an IoC container '{this.container}'.");
                     }
                 }
 

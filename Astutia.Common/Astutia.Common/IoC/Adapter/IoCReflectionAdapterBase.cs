@@ -107,7 +107,7 @@ namespace Astutia.Common.IoC.Adapter
 
             if (method == null)
             {
-                throw new InvalidOperationException(string.Format("No method '{0}'.", name));
+                throw new InvalidOperationException($"No method '{name}'.");
             }
 
             lock (this.syncObject)
@@ -147,7 +147,7 @@ namespace Astutia.Common.IoC.Adapter
 
             if (method == null)
             {
-                throw new InvalidOperationException(string.Format("No method '{0}'.", name));
+                throw new InvalidOperationException($"No method '{name}'.");
             }
 
             if (cached)
